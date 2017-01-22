@@ -1,3 +1,7 @@
+#README for this is currently in the works
+
+However just so you know, the web backend will be built on:
+
 # Laravel PHP Framework
 
 [![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
