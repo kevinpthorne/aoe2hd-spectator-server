@@ -36,7 +36,11 @@ class RoutedWsServer extends WsServer
         }
     }
 
-    public function addRoute(string $path, WsComponentInterface $handler)
+    /**
+     * @param string $path
+     * @param WsComponentInterface $handler
+     */
+    public function addRoute($path, WsComponentInterface $handler)
     {
         if($path[0] !== "/") {
             $path = "/$path";
