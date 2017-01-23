@@ -24,7 +24,7 @@ class UpStream extends Thread implements WsComponentInterface
      * DownStream constructor.
      * @param $_server
      */
-    public function __construct($server)
+    public function __construct(WsServer $server)
     {
         $this->_server = $server;
     }
