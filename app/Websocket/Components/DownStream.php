@@ -27,7 +27,7 @@ class DownStream extends Thread implements WsComponentInterface
      * DownStream constructor.
      * @param $_server
      */
-    public function __construct($server)
+    public function __construct(WsServer $server)
     {
         $this->_server = $server;
     }
@@ -88,24 +88,22 @@ class DownStream extends Thread implements WsComponentInterface
         $this->_server->disconnect($this->_client->socket);
     }
 
-    function process($client, $message, WsServer $server)
+    function process($client, $message)
     {
+        $this->_message = $message;
         if($message === "start") {
-            $_server = $server;
-            $_client = $client;
-            $_message = $message;
-
             $this->start();
         }
     }
 
-    function connected($client, WsServer $server)
+    function connected($client)
     {
         $client->spectator = true;
+        $this->_client = $client;
     }
 
-    function closed($client, WsServer $server)
+    function closed($client)
     {
-        $server->stdout("MD5 Checksum: ". md5_file ($this->_lastFilename));
+        $this->_server->stdout("MD5 Checksum: ". md5_file ($this->_lastFilename));
     }
 }

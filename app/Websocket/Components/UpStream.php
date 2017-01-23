@@ -53,14 +53,13 @@ class UpStream extends Thread implements WsComponentInterface
 
     function process($streamer, $data)
     {
-        $this->_streamer = $streamer;
         $this->_data = $data;
-
         $this->start();
     }
 
     function connected($client)
     {
+        $this->_streamer = $client;
         $client->spectator = false;
     }
 
