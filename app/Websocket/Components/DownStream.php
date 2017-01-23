@@ -21,8 +21,6 @@ class DownStream implements WsComponentInterface
     function process($client, $message, WsServer $server)
     {
         if($message === "1") {
-            sleep(1);
-
             $query = $client->query;
             $filename = str_replace(".aoe2record", "", $query['filename']);
             $player = $query['player'];
@@ -44,6 +42,9 @@ class DownStream implements WsComponentInterface
                 fseek($fileReader, $query['position']);
                 $position = $query['position'];
             }
+
+            sleep(1);
+
             while($errors < DownStream::ERROR_CAP) {
                 if ($position < (256 * 1024)) { //mgz header information
                     $buffer = fgets($fileReader, (256 * 1024));
@@ -69,7 +70,7 @@ class DownStream implements WsComponentInterface
             //$conn->send("{'position':$position}");
             //$client->sizeSent += $position/1024; //@todo: fix math
 
-            sleep(2);
+            sleep(1);
 
             $server->disconnect($client->socket);
 

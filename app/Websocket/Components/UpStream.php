@@ -22,7 +22,11 @@ class UpStream implements WsComponentInterface
         $player = $query['player'];
         // @todo: see if file exists. if so, deny
         $fileWriter = fopen("../../public/recs/" . $player . "." . $filename . '.aoe2record', "a");
-        $success = fwrite($fileWriter, $data);
+        $success = false;
+        if(flock($fileWriter, LOCK_EX | LOCK_NB)) {
+            $success = fwrite($fileWriter, $data);
+            flock($fileWriter, LOCK_UN);
+        }
         $streamer->sizeSent += strlen(serialize($data))/1024;
         if ($success) {
             $msg = 'continue';
