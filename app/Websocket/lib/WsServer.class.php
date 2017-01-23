@@ -31,11 +31,11 @@ abstract class WsServer implements WsComponentInterface
         $this->stdout("Server started\nListening on: $addr:$port\nMaster socket: " . $this->master);
     }
 
-    abstract public function process($client, $message); // Called immediately when the data is recieved.
+    abstract public function process(&$client, $message); // Called immediately when the data is recieved.
 
-    abstract public function connected($client);        // Called after the handshake response is sent to the client.
+    abstract public function connected(&$client);        // Called after the handshake response is sent to the client.
 
-    abstract public function closed($client);           // Called after the connection is closed.
+    abstract public function closed(&$client);           // Called after the connection is closed.
 
     protected function connecting($client)
     {
@@ -47,7 +47,7 @@ abstract class WsServer implements WsComponentInterface
     {
         if ($client->handshake) {
             $message = $this->frame($message, $client, $type);
-            $result = @socket_write($client->socket, $message, strlen($message));
+            $result = socket_write($client->socket, $message, strlen($message));
         } else {
             // User has not yet performed their handshake.  Store for sending later.
             $holdingMessage = array('user' => $client, 'message' => $message);
@@ -303,6 +303,14 @@ abstract class WsServer implements WsComponentInterface
             }
         }
         return null;
+    }
+
+    public function getClientById($id) {
+        echo $this->clients[$id]->socket . "\n";
+        return $this->clients[$id];
+    }
+    public function getSocketByClient($id) {
+        return $this->sockets[$id];
     }
 
     public function stdout($message)

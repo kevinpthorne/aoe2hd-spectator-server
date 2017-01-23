@@ -19,26 +19,29 @@ class DownStream extends Thread implements WsComponentInterface
 
     private $_lastFilename;
 
-    private $_server;
-    private $_client;
-    private $_message;
+    private $server;
+    private $client;
+    private $message;
+
+    private $query;
 
     /**
      * DownStream constructor.
      * @param $_server
      */
-    public function __construct(WsServer $server)
+    public function __construct(WsServer &$server)
     {
-        $this->_server = $server;
+        $this->server = $server;
     }
 
-
     function run() {
-        $query = $this->_client->query;
-        $filename = str_replace(".aoe2record", "", $query['filename']);
-        $player = $query['player'];
 
-        echo "{$this->_client->id} requested \"recs/$player.$filename.aoe2record\"\n";
+        echo "{$this->client->socket}\n";
+
+        $filename = str_replace(".aoe2record", "", $this->query['filename']);
+        $player = $this->query['player'];
+
+        echo "{$this->client->id} requested \"recs/$player.$filename.aoe2record\"\n";
 
         $errors = 0;
         $position = 0;
@@ -48,7 +51,7 @@ class DownStream extends Thread implements WsComponentInterface
         $this->_lastFilename = "../../public/recs/" . $player . "." . $filename . '.aoe2record';
 
         if($fileReader == false) {
-            $this->_server->disconnect($this->_client->socket);
+            $this->server->disconnect($this->client->socket);
             return;
         }
         if(isset($query['position'])) {
@@ -59,10 +62,14 @@ class DownStream extends Thread implements WsComponentInterface
         sleep(1);
 
         while($errors < DownStream::ERROR_CAP) {
-            if ($position < (256 * 1024)) { //mgz header information
-                $buffer = fgets($fileReader, (256 * 1024));
-            } else {
-                $buffer = fgets($fileReader, 1024);
+            $buffer = "";
+            if(flock($fileReader, LOCK_SH | LOCK_NB)) {
+                if ($position < (256 * 1024)) { //mgz header information
+                    $buffer = fgets($fileReader, (256 * 1024));
+                } else {
+                    $buffer = fgets($fileReader, 8192);
+                }
+                flock($fileReader, LOCK_UN);
             }
             $step = strlen($buffer);
             if ($step == 0) {
@@ -73,7 +80,7 @@ class DownStream extends Thread implements WsComponentInterface
                 continue;
             }
             $errors = 0;
-            $this->_server->send($this->_client, $buffer, 'binary');
+            $this->server->send($this->client, $buffer, 'binary');
             $position += $step;
             //echo "\t$position\n";
             usleep(100000);
@@ -85,25 +92,26 @@ class DownStream extends Thread implements WsComponentInterface
 
         sleep(1);
 
-        $this->_server->disconnect($this->_client->socket);
+        $this->server->disconnect($this->client->socket);
     }
 
-    function process($client, $message)
+    function process(&$client, $message)
     {
-        $this->_message = $message;
+        print_r($client);
+        $this->client = clone $client;
+        $this->query = $client->query;
         if($message === "start") {
             $this->start();
         }
     }
 
-    function connected($client)
+    function connected(&$client)
     {
         $client->spectator = true;
-        $this->_client = $client;
     }
 
-    function closed($client)
+    function closed(&$client)
     {
-        $this->_server->stdout("MD5 Checksum: ". md5_file ($this->_lastFilename));
+        $this->server->stdout("MD5 Checksum: ". md5_file ($this->_lastFilename));
     }
 }

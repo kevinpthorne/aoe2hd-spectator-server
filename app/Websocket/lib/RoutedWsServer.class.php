@@ -2,38 +2,32 @@
 
 namespace WsLib;
 
-/**
- * Created by PhpStorm.
- * User: kevint
- * Date: 1/14/2017
- * Time: 1:49 AM
- */
 class RoutedWsServer extends WsServer
 {
     private $routes = array();
     private $connections = array();
 
-    function process($client, $message)
+    function process(&$client, $message)
     {
-        $handler = $this->connections[$client];
+        $handler = $this->connections[$client->id];
         if ($handler != false) {
             $handler->process($client, $message);
         }
     }
 
-    function connected($client)
+    function connected(&$client)
     {
         $handlerClass = $this->lookupHandlerByClient($client);
         $handler = new $handlerClass($this);
         if ($handler != false) {
             $handler->connected($client);
-            $connections[$client] = $handler;
+            $this->connections[$client->id] = $handler;
         }
     }
 
-    function closed($client)
+    function closed(&$client)
     {
-        $handler = $this->connections[$client];
+        $handler = $this->connections[$client->id];
         if ($handler != false) {
             $handler->closed($client);
         }

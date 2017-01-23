@@ -11,10 +11,10 @@ namespace WsLib;
 interface WsComponentInterface
 {
 
-    function process($client, $message);
+    function process(&$client, $message);
 
-    function connected($client);
+    function connected(&$client);
 
-    function closed($client);
+    function closed(&$client);
 
 }

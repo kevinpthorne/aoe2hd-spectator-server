@@ -24,8 +24,14 @@ class Client
 
     public $hasSentClose = false;
 
-    function __construct($id, $socket) {
+    function __construct($id, $socket)
+    {
         $this->id = $id;
         $this->socket = $socket;
+    }
+
+    public function __clone()
+    {
+        $this->socket = clone $this->socket;
     }
 }
