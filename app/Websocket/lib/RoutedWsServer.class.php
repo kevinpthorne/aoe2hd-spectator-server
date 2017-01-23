@@ -11,36 +11,39 @@ namespace WsLib;
 class RoutedWsServer extends WsServer
 {
     private $routes = array();
+    private $connections = array();
 
-    function process($client, $message, WsServer $server)
+    function process($client, $message)
     {
-        $handler = $this->lookupHandlerByClient($client);
+        $handler = $this->connections[$client];
         if ($handler != false) {
-            $handler->process($client, $message, $server);
+            $handler->process($client, $message);
         }
     }
 
-    function connected($client, WsServer $server)
+    function connected($client)
     {
-        $handler = $this->lookupHandlerByClient($client);
+        $handlerClass = $this->lookupHandlerByClient($client);
+        $handler = new $handlerClass($this);
         if ($handler != false) {
-            $handler->connected($client, $server);
+            $handler->connected($client);
+            $connections[$client] = $handler;
         }
     }
 
-    function closed($client, WsServer $server)
+    function closed($client)
     {
-        $handler = $this->lookupHandlerByClient($client);
+        $handler = $this->connections[$client];
         if ($handler != false) {
-            $handler->closed($client, $server);
+            $handler->closed($client);
         }
     }
 
     /**
      * @param string $path
-     * @param WsComponentInterface $handler
+     * @param string $handler
      */
-    public function addRoute($path, WsComponentInterface $handler)
+    public function addRoute($path, $handler)
     {
         if($path[0] !== "/") {
             $path = "/$path";

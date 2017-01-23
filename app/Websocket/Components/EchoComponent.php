@@ -13,17 +13,30 @@ use WsLib\WsServer;
 
 class EchoComponent implements WsComponentInterface
 {
-    function process($client, $message, WsServer $server)
+
+    private $_server;
+
+    /**
+     * EchoComponent constructor.
+     * @param $_server
+     */
+    public function __construct($server)
     {
-        $server->send($client, $message);
+        $this->_server = $server;
     }
 
-    function connected($client, WsServer $server)
+
+    function process($client, $message)
+    {
+        $this->_server->send($client, $message);
+    }
+
+    function connected($client)
     {
         echo "---ECHO!!\n";
     }
 
-    function closed($client, WsServer $server)
+    function closed($client)
     {
         // TODO: Implement closed() method.
     }

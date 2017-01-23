@@ -31,11 +31,11 @@ abstract class WsServer implements WsComponentInterface
         $this->stdout("Server started\nListening on: $addr:$port\nMaster socket: " . $this->master);
     }
 
-    abstract public function process($client, $message, WsServer $server); // Called immediately when the data is recieved.
+    abstract public function process($client, $message); // Called immediately when the data is recieved.
 
-    abstract public function connected($client, WsServer $server);        // Called after the handshake response is sent to the client.
+    abstract public function connected($client);        // Called after the handshake response is sent to the client.
 
-    abstract public function closed($client, WsServer $server);           // Called after the connection is closed.
+    abstract public function closed($client);           // Called after the connection is closed.
 
     protected function connecting($client)
     {

@@ -8,15 +8,29 @@
 
 namespace AoE2HDSpectatorServer;
 
+use Thread;
 use WsLib\WsComponentInterface;
 use WsLib\WsServer;
 
-class UpStream implements WsComponentInterface
+class UpStream extends Thread implements WsComponentInterface
 {
 
-    function process($streamer, $data, WsServer $server)
+    private $_server;
+
+    private $_streamer;
+    private $_data;
+
+    /**
+     * DownStream constructor.
+     * @param $_server
+     */
+    public function __construct($server)
     {
-        $query = $streamer->query;
+        $this->_server = $server;
+    }
+
+    function run() {
+        $query = $this->_streamer->query;
         print_r("Receiving {$query['filename']} from " . $query['player'] . "\n");
         $filename = str_replace(".aoe2record", "", $query['filename']);
         $player = $query['player'];
@@ -24,25 +38,33 @@ class UpStream implements WsComponentInterface
         $fileWriter = fopen("../../public/recs/" . $player . "." . $filename . '.aoe2record', "a");
         $success = false;
         if(flock($fileWriter, LOCK_EX | LOCK_NB)) {
-            $success = fwrite($fileWriter, $data);
+            $success = fwrite($fileWriter, $this->_data);
             flock($fileWriter, LOCK_UN);
         }
-        $streamer->sizeSent += strlen(serialize($data))/1024;
+        $this->_streamer->sizeSent += strlen(serialize($this->_data))/1024;
         if ($success) {
             $msg = 'continue';
         } else {
             $msg = 'error';
         }
         fclose($fileWriter);
-        $server->send($streamer, $msg);
+        $this->_server->send($this->_streamer, $msg);
     }
 
-    function connected($client, WsServer $server)
+    function process($streamer, $data)
+    {
+        $this->_streamer = $streamer;
+        $this->_data = $data;
+
+        $this->start();
+    }
+
+    function connected($client)
     {
         $client->spectator = false;
     }
 
-    function closed($client, WsServer $server)
+    function closed($client)
     {
         // TODO: Implement closed() method.
     }

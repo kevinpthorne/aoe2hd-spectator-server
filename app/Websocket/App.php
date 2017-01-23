@@ -20,10 +20,10 @@ class AoE2StreamingServer extends RoutedWsServer
 
 
 $app = new RoutedWsServer("0.0.0.0", "8082");
-$app->addRoute("/test/echo", new EchoComponent());
-$app->addRoute("/test/becho", new BEchoComponent());
-$app->addRoute("/upstream", new UpStream());
-$app->addRoute("/downstream", new DownStream());
+$app->addRoute("/test/echo", "EchoComponent");
+$app->addRoute("/test/becho", "BEchoComponent");
+$app->addRoute("/upstream", "UpStream");
+$app->addRoute("/downstream", "DownStream");
 try {
     $app->run();
 } catch (\Exception $e) {

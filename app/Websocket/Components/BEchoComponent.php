@@ -14,17 +14,28 @@ use WsLib\WsServer;
 class BEchoComponent implements WsComponentInterface
 {
 
-    function process($client, $message, WsServer $server)
+    private $_server;
+
+    /**
+     * EchoComponent constructor.
+     * @param $_server
+     */
+    public function __construct($server)
     {
-        $server->send($client, $message, 'binary');
+        $this->_server = $server;
     }
 
-    function connected($client, WsServer $server)
+    function process($client, $message)
+    {
+        $this->_server->send($client, $message, 'binary');
+    }
+
+    function connected($client)
     {
         echo "BECHO!!\n";
     }
 
-    function closed($client, WsServer $server)
+    function closed($client)
     {
         // TODO: Implement closed() method.
     }
