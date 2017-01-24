@@ -44,3 +44,11 @@ You can edit ```App.php``` to change the port of the Websocket server.
 The web front end by default uses port 8000 for development purposes; change it with this:
 
 ```php artisan serve --port=8080```
+
+## DISCLAIMER
+
+This is not only served AS-IS, but Microsoft, Ensemble Studios, Skybox, and whoever else you want to associate Age of Empires 2 with has nothing to do with these projects. Purely started by me, Kevin "echospot" Thorne.
+
+## License & Contributing
+
+LICENSE.MD includes all licenses, mostly for libraries included (such as [PHP-Websockets](https://github.com/ghedipunk/PHP-Websockets), Java Websocket Libraries, etc). It also will include an Apache License 2.0. [This means you can contribute freely! Just tell everyone what you did and include previous licenses!](https://tldrlegal.com/license/apache-license-2.0-(apache-2.0))
