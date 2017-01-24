@@ -1,4 +1,6 @@
-# Age of Empires 2 HD - Spectator Server
+[![Logo](https://github.com/kevinpthorne/aoe2hd-spectator-client/raw/master/src/main/resources/icons/ready.png)]() 
+Age of Empires 2 HD - Spectator Server
+======
 
 This is the server backend/website for the *unofficial* companion app that streams AoE2 HD games live.
 
