@@ -10,7 +10,15 @@ This server is broken into 2 parts: **Websocket** server backend that manages th
 
 ## How it works
 
-[![Overview](https://raw.githubusercontent.com/kevinpthorne/aoe2hd-spectator-server/master/docs/graphics/Simple%20Diagram.svg)] ("Overview")
+![Overview](https://github.com/kevinpthorne/aoe2hd-spectator-server/blob/master/docs/graphics/Overview.png)
+
+This is essentially what Voobly does under the hood, just not as integrated since HD doesn't expose controls like UserPatch does.
+
+![UpStream](https://github.com/kevinpthorne/aoe2hd-spectator-server/blob/master/docs/graphics/Upstream.png)
+
+Age of Empires 2 saves the recording files as the game progresses. (This is why recording games on older computers/hard drives lags the game). The [Client](https://github.com/kevinpthorne/aoe2hd-spectator-client) take the recording file, as it's coming, and upload them to a Relay Server (this repo). Clients can then, after accessing the Server's webpage, can then download and watch the game.
+
+![DownStream](https://github.com/kevinpthorne/aoe2hd-spectator-server/blob/master/docs/graphics/Downstream.png)
 
 ## Requirements
  
@@ -25,7 +33,7 @@ If you *really* want to play it in its current broken form, this is how you woul
 
 ```php artisan serve``` - Web front
 
-```cd app\Websocket; php App.php``` - Actual streaming server
+```cd app\Websocket; php -dextension=path/to/php_pthreads.so App.php``` - Actual streaming server
 
 ## Configuration
 
