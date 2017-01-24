@@ -10,7 +10,7 @@ This server is broken into 2 parts: **Websocket** server backend that manages th
 
 ## How it works
 
-![Overview](https://github.com/kevinpthorne/aoe2hd-spectator-server/blob/master/docs/graphics/Simple%20Diagram.svg "Overview")
+[![Overview](https://raw.githubusercontent.com/kevinpthorne/aoe2hd-spectator-server/master/docs/graphics/Simple%20Diagram.svg)] ("Overview")
 
 ## Requirements
  
