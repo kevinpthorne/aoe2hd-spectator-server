@@ -1,31 +1,36 @@
-#README for this is currently in the works
+# Age of Empires 2 HD - Spectator Server
 
-However just so you know, the web backend will be built on:
+This is the server backend/website for the *unofficial* companion app that streams AoE2 HD games live.
 
-# Laravel PHP Framework
+Forenote, currently broken, please don't try to install yet!
 
-[![Build Status](https://travis-ci.org/laravel/framework.svg)](https://travis-ci.org/laravel/framework)
-[![Total Downloads](https://poser.pugx.org/laravel/framework/d/total.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Stable Version](https://poser.pugx.org/laravel/framework/v/stable.svg)](https://packagist.org/packages/laravel/framework)
-[![Latest Unstable Version](https://poser.pugx.org/laravel/framework/v/unstable.svg)](https://packagist.org/packages/laravel/framework)
-[![License](https://poser.pugx.org/laravel/framework/license.svg)](https://packagist.org/packages/laravel/framework)
+## Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable, creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as authentication, routing, sessions, queueing, and caching.
+This server is broken into 2 parts: **Websocket** server backend that manages the actually streaming of recordings and **Laravel** for a web frontend to display available live games. Both parts are written on PHP 7.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications. A superb inversion of control container, expressive migration system, and tightly integrated unit testing support give you the tools you need to build any application with which you are tasked.
+## How it works
 
-## Official Documentation
+[![Overview](https://raw.githubusercontent.com/kevinpthorne/aoe2hd-spectator-server/master/docs/graphics/Simple%20Diagram.svg)] ("Overview")
 
-Documentation for the framework can be found on the [Laravel website](http://laravel.com/docs).
+## Requirements
+ 
+At the moment, you'll need a fast hard drive to minimize load times. Other requirements:
 
-## Contributing
+- PHP 7
+  - pthreads v3 extention to enable for the Websocket Server
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](http://laravel.com/docs/contributions).
+## How to run
 
-## Security Vulnerabilities
+If you *really* want to play it in its current broken form, this is how you would run it.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell at taylor@laravel.com. All security vulnerabilities will be promptly addressed.
+```php artisan serve``` - Web front
 
-## License
+```cd app\Websocket; php App.php``` - Actual streaming server
 
-The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+## Configuration
+
+You can edit ```App.php``` to change the port of the Websocket server.
+
+The web front end by default uses port 8000 for development purposes; change it with this:
+
+```php artisan serve --port=8080```
