@@ -27,7 +27,6 @@ Age of Empires 2 saves the recording files as the game progresses. (This is why 
 At the moment, you'll need a fast hard drive to minimize load times. Other requirements:
 
 - PHP 7
-  - pthreads v3 extention to enable for the Websocket Server
 
 ## How to run
 

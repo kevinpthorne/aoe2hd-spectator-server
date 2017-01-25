@@ -8,33 +8,19 @@
 
 namespace AoE2HDSpectatorServer;
 
+use WsLib\Client;
 use WsLib\WsComponentInterface;
 use WsLib\WsServer;
 
 class UpStream implements WsComponentInterface
 {
 
-    private $_server;
-
-    private $_streamer;
-    private $_data;
-
-    /**
-     * DownStream constructor.
-     * @param $_server
-     */
-    public function __construct(WsServer $server)
+    function process(Client $streamer, $data, WsServer $server)
     {
-        $this->_server = $server;
-    }
+        $query = $streamer->query;
 
-    function process($streamer, $data)
-    {
-        $this->_data = $data;
-        //$this->start();
-
-        $query = $this->_streamer->query;
         print_r("Receiving {$query['filename']} from " . $query['player'] . "\n");
+
         $filename = str_replace(".aoe2record", "", $query['filename']);
         $player = $query['player'];
         // @todo: see if file exists. if so, deny
@@ -44,26 +30,26 @@ class UpStream implements WsComponentInterface
         $fileWriter = fopen("../../public/recs/" . $player . "." . $filename . '.aoe2record', "a");
         $success = false;
         if(flock($fileWriter, LOCK_EX | LOCK_NB)) {
-            $success = fwrite($fileWriter, $this->_data);
+            $success = fwrite($fileWriter, $data);
             flock($fileWriter, LOCK_UN);
         }
-        //$this->_streamer->sizeSent += strlen(serialize($this->_data))/1024;
+        //$streamer->sizeSent += strlen(serialize($this->_data))/1024;
         if ($success) {
             $msg = 'continue';
         } else {
             $msg = 'error';
         }
         fclose($fileWriter);
-        $this->_server->send($this->_streamer, $msg);
+        $server->send($streamer, $msg);
     }
 
-    function connected($client)
+    function connected(Client $client, WsServer $server)
     {
-        $this->_streamer = $client;
+        print_r("Ready to receive {$client->query['filename']} from " . $client->query['player'] . "\n");
         $client->spectator = false;
     }
 
-    function closed($client)
+    function closed(Client $client, WsServer $server)
     {
         // TODO: Implement closed() method.
     }

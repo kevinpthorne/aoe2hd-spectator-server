@@ -7,29 +7,29 @@ class RoutedWsServer extends WsServer
     private $routes = array();
     private $connections = array();
 
-    function process(&$client, $message)
+    function process(Client $client, $message, WsServer $server)
     {
         $handler = $this->connections[$client->id];
         if ($handler != false) {
-            $handler->process($client, $message);
+            $handler->process($client, $message, $this);
         }
     }
 
-    function connected(&$client)
+    function connected(Client $client, WsServer $server)
     {
         $handlerClass = $this->lookupHandlerByClient($client);
-        $handler = new $handlerClass($this);
+        $handler = new $handlerClass();
         if ($handler != false) {
-            $handler->connected($client);
+            $handler->connected($client, $this);
             $this->connections[$client->id] = $handler;
         }
     }
 
-    function closed(&$client)
+    function closed(Client $client, WsServer $server)
     {
         $handler = $this->connections[$client->id];
         if ($handler != false) {
-            $handler->closed($client);
+            $handler->closed($client, $this);
         }
     }
 

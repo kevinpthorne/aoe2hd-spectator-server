@@ -13,6 +13,7 @@ class Client
     public $id;
 
     public $headers = array();
+    public $query = array();
 
     public $handshake = false;
 
@@ -28,10 +29,5 @@ class Client
     {
         $this->id = $id;
         $this->socket = $socket;
-    }
-
-    public function __clone()
-    {
-        $this->socket = clone $this->socket;
     }
 }

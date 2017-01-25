@@ -8,34 +8,24 @@
 
 namespace AoE2HDSpectatorServer;
 
+use WsLib\Client;
 use WsLib\WsComponentInterface;
 use WsLib\WsServer;
 
 class BEchoComponent implements WsComponentInterface
 {
 
-    private $_server;
-
-    /**
-     * EchoComponent constructor.
-     * @param $_server
-     */
-    public function __construct($server)
+    function process(Client $client, $message, WsServer $server)
     {
-        $this->_server = $server;
+        $server->send($client, $message, 'binary');
     }
 
-    function process($client, $message)
-    {
-        $this->_server->send($client, $message, 'binary');
-    }
-
-    function connected($client)
+    function connected(Client $client, WsServer $server)
     {
         echo "BECHO!!\n";
     }
 
-    function closed($client)
+    function closed(Client $client, WsServer $server)
     {
         // TODO: Implement closed() method.
     }

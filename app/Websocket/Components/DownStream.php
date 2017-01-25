@@ -9,109 +9,82 @@
 namespace AoE2HDSpectatorServer;
 
 
-use Thread;
 use WsLib\WsComponentInterface;
+use WsLib\Client;
 use WsLib\WsServer;
 
-class DownStream extends Thread implements WsComponentInterface
+class DownStream implements WsComponentInterface
 {
-    const ERROR_CAP = 10;
 
     private $_lastFilename;
 
-    private $server;
-    private $client;
-    private $message;
-
-    private $query;
-
-    /**
-     * DownStream constructor.
-     * @param $_server
-     */
-    public function __construct(WsServer &$server)
+    function process(Client $client, $message, WsServer $server)
     {
-        $this->server = $server;
-    }
+        $command = json_decode($message, true);
+        if (isset($command['action']) && $command['action'] === 'pull') {
+            $filename = str_replace(".aoe2record", "", $client->query['filename']);
+            $player = $client->query['player'];
 
-    function run() {
+            $position = 0;
 
-        echo "{$this->client->socket}\n";
+            $fileReader = fopen("../../public/recs/" . $player . "." . $filename . '.aoe2record', "r");
 
-        $filename = str_replace(".aoe2record", "", $this->query['filename']);
-        $player = $this->query['player'];
+            $this->_lastFilename = "../../public/recs/" . $player . "." . $filename . '.aoe2record';
 
-        echo "{$this->client->id} requested \"recs/$player.$filename.aoe2record\"\n";
+            if ($fileReader == false) {
+                $server->disconnect($client->socket);
+                return;
+            }
+            if (isset($command['position'])) {
+                fseek($fileReader, $command['position']);
+                $position = $command['position'];
+            }
 
-        $errors = 0;
-        $position = 0;
+            //if (flock($fileReader, LOCK_SH | LOCK_NB)) {
+            if ($position < (256 * 1024)) { //mgz header information
+                $buffer = fgets($fileReader, (256 * 1024));
+            } else {
+                $buffer = fgets($fileReader, 1024);
+            }
+            //flock($fileReader, LOCK_UN);
+            $step = strlen($buffer);
+            clearstatcache();
+            if ($step == 0 && filesize($this->_lastFilename) > $position) {
+                //echo "File error while downstreaming\n";
+                $server->send($client, '{"status":"error","position":' . $position . '}');
+                return;
+            } elseif ($step == 0 && filesize($this->_lastFilename) <= $position) {
+                //echo "EOF, prolly just waiting for streamer $position : " . filesize($this->_lastFilename) . " - was given {$command['position']} to start\n";
+                $server->send($client, '{"status":"eof","position":' . $position . '}');
+                return;
+            } else {
+                //print_r("Giving {$client->query['filename']} from " . $client->query['player'] . "\n");
+                $server->send($client, $buffer, 'binary');
+                $position += $step;
+                $server->send($client, '{"action":"continue","position":' . $position . '}');
 
-        $fileReader = fopen("../../public/recs/" . $player . "." . $filename . '.aoe2record', "r");
+            }
+            //}
 
-        $this->_lastFilename = "../../public/recs/" . $player . "." . $filename . '.aoe2record';
-
-        if($fileReader == false) {
-            $this->server->disconnect($this->client->socket);
+            fclose($fileReader);
+        } elseif (isset($command['action']) && strcasecmp($command['action'], 'sha1')) {
+            $server->send($client, '{"action":"checksum","type":"sha1","value":"' . sha1_file($this->_lastFilename) . '"}');
+            return;
+        } elseif (isset($command['action']) && strcasecmp($command['action'], 'md5')) {
+            $server->send($client, '{"action":"checksum","type":"md5","value":"' . md5_file($this->_lastFilename) . '"}');
             return;
         }
-        if(isset($query['position'])) {
-            fseek($fileReader, $query['position']);
-            $position = $query['position'];
-        }
-
-        sleep(1);
-
-        while($errors < DownStream::ERROR_CAP) {
-            $buffer = "";
-            if(flock($fileReader, LOCK_SH | LOCK_NB)) {
-                if ($position < (256 * 1024)) { //mgz header information
-                    $buffer = fgets($fileReader, (256 * 1024));
-                } else {
-                    $buffer = fgets($fileReader, 8192);
-                }
-                flock($fileReader, LOCK_UN);
-            }
-            $step = strlen($buffer);
-            if ($step == 0) {
-                echo "Retrying...[Attempt " . ($errors+1) . "/" . DownStream::ERROR_CAP . "]\n";
-                fseek($fileReader, $position);
-                $errors++;
-                sleep(1);
-                continue;
-            }
-            $errors = 0;
-            $this->server->send($this->client, $buffer, 'binary');
-            $position += $step;
-            //echo "\t$position\n";
-            usleep(100000);
-        }
-
-        fclose($fileReader);
-        //$conn->send("{'position':$position}");
-        //$client->sizeSent += $position/1024; //@todo: fix math
-
-        sleep(1);
-
-        $this->server->disconnect($this->client->socket);
     }
 
-    function process(&$client, $message)
-    {
-        print_r($client);
-        $this->client = clone $client;
-        $this->query = $client->query;
-        if($message === "start") {
-            $this->start();
-        }
-    }
-
-    function connected(&$client)
+    function connected(Client $client, WsServer $server)
     {
         $client->spectator = true;
+        $this->client = $client;
+        $this->query = $client->query;
     }
 
-    function closed(&$client)
+    function closed(Client $client, WsServer $server)
     {
-        $this->server->stdout("MD5 Checksum: ". md5_file ($this->_lastFilename));
+        //$server->stdout("SHA1 Checksum: " . sha1_file($this->_lastFilename));
     }
 }

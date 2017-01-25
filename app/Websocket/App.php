@@ -16,10 +16,18 @@ use WsLib\RoutedWsServer;
 class AoE2StreamingServer extends RoutedWsServer
 {
 
+    public static function Instance() {
+        static $INSTANCE = null;
+        if($INSTANCE === null) {
+            $INSTANCE = new AoE2StreamingServer('0.0.0.0', '8082');
+        }
+        return $INSTANCE;
+    }
+
 }
 
 
-$app = new RoutedWsServer("0.0.0.0", "8082");
+$app = AoE2StreamingServer::Instance();
 $app->addRoute("/test/echo", "AoE2HDSpectatorServer\\EchoComponent");
 $app->addRoute("/test/becho", "AoE2HDSpectatorServer\\BEchoComponent");
 $app->addRoute("/upstream", "AoE2HDSpectatorServer\\UpStream");

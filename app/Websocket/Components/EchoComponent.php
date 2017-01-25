@@ -8,35 +8,24 @@
 
 namespace AoE2HDSpectatorServer;
 
+use WsLib\Client;
 use WsLib\WsComponentInterface;
 use WsLib\WsServer;
 
 class EchoComponent implements WsComponentInterface
 {
 
-    private $_server;
-
-    /**
-     * EchoComponent constructor.
-     * @param $_server
-     */
-    public function __construct($server)
+    function process(Client $client, $message, WsServer $server)
     {
-        $this->_server = $server;
+        $server->send($client, $message);
     }
 
-
-    function process($client, $message)
-    {
-        $this->_server->send($client, $message);
-    }
-
-    function connected($client)
+    function connected(Client $client, WsServer $server)
     {
         echo "---ECHO!!\n";
     }
 
-    function closed($client)
+    function closed(Client $client, WsServer $server)
     {
         // TODO: Implement closed() method.
     }

@@ -9,12 +9,11 @@ namespace WsLib;
  */
 abstract class WsServer implements WsComponentInterface
 {
-
     protected $maxBufferSize;
     protected $master;
     protected $sockets = array();
     protected $clients = array();
-    protected $heldMessages = array();
+    public $heldMessages = array();
     protected $interactive = true;
     protected $headerOriginRequired = false;
     protected $headerSecWebSocketProtocolRequired = false;
@@ -31,11 +30,11 @@ abstract class WsServer implements WsComponentInterface
         $this->stdout("Server started\nListening on: $addr:$port\nMaster socket: " . $this->master);
     }
 
-    abstract public function process(&$client, $message); // Called immediately when the data is recieved.
+    abstract public function process(Client $client, $message, WsServer $server); // Called immediately when the data is recieved.
 
-    abstract public function connected(&$client);        // Called after the handshake response is sent to the client.
+    abstract public function connected(Client $client, WsServer $server);        // Called after the handshake response is sent to the client.
 
-    abstract public function closed(&$client);           // Called after the connection is closed.
+    abstract public function closed(Client $client, WsServer $server);           // Called after the connection is closed.
 
     protected function connecting($client)
     {
@@ -43,15 +42,19 @@ abstract class WsServer implements WsComponentInterface
         // the handshake has completed.
     }
 
+    public function queueMessage($client, $message, $type = 'text') {
+        $holdingMessage = array('user' => $client, 'message' => $message);
+        $this->heldMessages[] = $holdingMessage;
+    }
+
     public function send($client, $message, $type = 'text')
     {
         if ($client->handshake) {
             $message = $this->frame($message, $client, $type);
-            $result = socket_write($client->socket, $message, strlen($message));
+            $result = socket_write($this->sockets[$client->id], $message, strlen($message));
         } else {
             // User has not yet performed their handshake.  Store for sending later.
-            $holdingMessage = array('user' => $client, 'message' => $message);
-            $this->heldMessages[] = $holdingMessage;
+            $this->queueMessage($client, $message, $type);
         }
     }
 
@@ -61,7 +64,7 @@ abstract class WsServer implements WsComponentInterface
         // per second, but possibly more often.
     }
 
-    protected function _tick()
+    public function _tick()
     {
         // Core maintenance processes, such as retrying failed messages.
         foreach ($this->heldMessages as $key => $hm) {
