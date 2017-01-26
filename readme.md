@@ -34,7 +34,7 @@ If you *really* want to play it in its current broken form, this is how you woul
 
 ```php artisan serve``` - Web front
 
-```cd app\Websocket; php -dextension=path/to/php_pthreads.so App.php``` - Actual streaming server
+```cd app\Websocket; php App.php``` - Actual streaming server
 
 ## Configuration
 
