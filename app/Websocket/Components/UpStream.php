@@ -8,6 +8,11 @@
 
 namespace AoE2HDSpectatorServer;
 
+use App\User;
+use App\Game;
+
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 use WsLib\Client;
 use WsLib\WsComponentInterface;
 use WsLib\WsServer;
@@ -19,15 +24,14 @@ class UpStream implements WsComponentInterface
     {
         $query = $streamer->query;
 
-        print_r("Receiving {$query['filename']} from " . $query['player'] . "\n");
+        print_r("Receiving {$query['filename']} from " . $streamer->user->name . "\n");
 
-        $filename = str_replace(".aoe2record", "", $query['filename']);
-        $player = $query['player'];
+        $player = $streamer->user->id;
         // @todo: see if file exists. if so, deny
         if (!file_exists('../../public/recs')) {
             mkdir('../../public/recs', 0755, false);
         }
-        $fileWriter = fopen("../../public/recs/" . $player . "." . $filename . '.aoe2record', "a");
+        $fileWriter = fopen("../../public/recs/" . $player . "." . $streamer->game->id . '.aoe2record', "a");
         $success = false;
         if(flock($fileWriter, LOCK_EX | LOCK_NB)) {
             $success = fwrite($fileWriter, $data);
@@ -45,12 +49,44 @@ class UpStream implements WsComponentInterface
 
     function connected(Client $client, WsServer $server)
     {
-        print_r("Ready to receive {$client->query['filename']} from " . $client->query['player'] . "\n");
-        $client->spectator = false;
+
+        if(!isset($client->query['key'])) {
+            $server->disconnect($client->socket);
+            echo "No key specified\n";
+            return;
+        } else {
+            $key = $client->query['key'];
+            try {
+                $user = User::where('key', $key)->firstOrFail();
+
+                $game = new Game;
+                $game->id = uniqid("g");
+                $game->user_id = $user->id;
+                $game->filename = $client->query['filename'];
+                $game->time_start = date("Y-m-d H:i:s");
+                $game->time_end = null;
+
+                $game->save();
+
+                $client->user = $user;
+                $client->game = $game;
+
+                $server->send($client, $game->id);
+
+            } catch(ModelNotFoundException $e) {
+                echo "No user found\n";
+                $server->disconnect($client->socket);
+                return;
+            }
+        }
+
+        print_r("Ready to receive {$client->query['filename']} from " . $client->query['key'] . "\n");
     }
 
     function closed(Client $client, WsServer $server)
     {
-        // TODO: Implement closed() method.
+        $game = Game::find($client->game->id);
+        $game->time_end = date("Y-m-d H:i:s");
+        $game->save();
     }
 }

@@ -1,6 +1,7 @@
 <?php
 
 spl_autoload_register(function ($fullClassName) {
+    error_reporting(E_ERROR);
     $types = ['class', 'interface', 'model'];
     $parts = explode('\\', $fullClassName);
     $class = end($parts);
@@ -22,4 +23,5 @@ spl_autoload_register(function ($fullClassName) {
     } catch (\Exception $e) {
         return false;
     }
+    error_reporting(E_ALL);
 });

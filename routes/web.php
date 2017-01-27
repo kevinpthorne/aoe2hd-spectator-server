@@ -11,6 +11,4 @@
 |
 */
 
-Route::get('/', function () {
-    return view('rec_info');
-});
+Route::get('/', 'GameController');
