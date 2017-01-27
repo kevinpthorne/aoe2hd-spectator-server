@@ -20,7 +20,7 @@
                     <tr>
                         <td>{{$liveGame->id}}</td>
                         <td>{{$liveGame->owner->name}}</td>
-                        <td>{{$liveGame->startTime}}</td>
+                        <td>{{$liveGame->time_start}}</td>
                         <td><a class="btn btn-primary"
                                href="aoe2hdspectator://downstream/{{$liveGame->id}}/{{$liveGame->owner->id}}"
                                role="button">Watch</a>
@@ -41,12 +41,16 @@
                 <tr>
                     <th>Player</th>
                     <th>Start Time</th>
+                    <th>End Time</th>
+                    <th>Duration</th>
                     <th></th>
                 </tr>
                 @foreach ($finished as $game)
                     <tr>
                         <td>{{$game->owner->name}}</td>
-                        <td>{{$game->startTime}}</td>
+                        <td>{{$game->time_start}}</td>
+                        <td>{{$game->time_end}}</td>
+                        <td>{{($game->time_end - $game->time_start)}}</td>
                         <td><a class="btn btn-primary"
                                href="aoe2hdspectator://downstream/{{$game->id}}/{{$game->owner->id}}"
                                role="button">Watch</a>
