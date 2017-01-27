@@ -23,13 +23,13 @@
                             <li><a href="/user/{{$_SESSION['steamid']}}">Profile</a></li>
                             <li><a href="/you">Account</a></li>
                             <li role="separator" class="divider"></li>
-                            <li>@php logoutbutton(); @endphp</li>
+                            <li><a href="/logout">Log Out</a></li>
                         </ul>
                     </li>
                 </ul>
             @else
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@php loginbutton('rectangle');@endphp</li>
+                    <li><a href='/login'><img src='http://cdn.steamcommunity.com/public/images/signinthroughsteam/sits_01.png'></a></li>
                 </ul>
             @endif
         </div><!-- /.navbar-collapse -->

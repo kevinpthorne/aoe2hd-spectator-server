@@ -21,3 +21,6 @@ Route::get('/login/error', function() {
 Route::get('/game/{id}', 'GameController');
 Route::get('/you', 'AccountController');
 Route::get('/user/{id}', 'UserController');
+
+Route::get('/login', 'SteamLoginController@login');
+Route::get('/logout', 'SteamLoginController@logout');

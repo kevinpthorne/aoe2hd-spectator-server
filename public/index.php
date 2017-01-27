@@ -19,8 +19,6 @@
 |
 */
 
-require __DIR__.'/../app/steamauth/steamauth.php';
-
 require __DIR__.'/../bootstrap/autoload.php';
 
 /*
