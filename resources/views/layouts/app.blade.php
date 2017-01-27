@@ -13,10 +13,6 @@
     <link rel="stylesheet" type="text/css" href="/css/ripples.min.css">
     <link rel="stylesheet" type="text/css" href="/css/app.css">
 
-    @php
-        require('./../app/steamauth/steamauth.php');
-    @endphp
-
 </head>
 <body>
 @include('layouts.nav')
