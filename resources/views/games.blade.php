@@ -5,11 +5,11 @@
 @section('content')
     <h1>Games</h1>
 
-    <div class="well well-lg">
+    <div class="row well well-lg">
         @if($live === false) @elseif($live->isEmpty())
             <h6>No live games!</h6>
         @else
-            <table>
+            <table class="table">
                 <tr>
                     <th>Game ID</th>
                     <th>Player</th>
@@ -21,7 +21,7 @@
                         <td>{{$liveGame->id}}</td>
                         <td>{{$liveGame->owner->name}}</td>
                         <td>{{$liveGame->time_start}}</td>
-                        <td><a class="btn btn-primary"
+                        <td><a class="btn btn-raised btn-primary"
                                href="aoe2hdspectator://downstream/{{$liveGame->id}}/{{$liveGame->owner->id}}"
                                role="button">Watch</a>
                         </td>
@@ -34,11 +34,11 @@
 
     <h3>Previous Games</h3>
 
-    <div class="well well-lg">
+    <div class="row well well-lg">
         @if($finished === false) @elseif($finished->isEmpty())
             <h6>No games!</h6>
         @else
-            <table>
+            <table class="table">
                 <tr>
                     <th>Player</th>
                     <th>Start Time</th>
@@ -52,7 +52,7 @@
                         <td>{{$game->time_start}}</td>
                         <td>{{$game->time_end}}</td>
                         <td>{{($game->time_end - $game->time_start)}}</td>
-                        <td><a class="btn btn-primary"
+                        <td><a class="btn btn-raised btn-primary"
                                href="aoe2hdspectator://downstream/{{$game->id}}/{{$game->owner->id}}"
                                role="button">Watch</a>
                         </td>
