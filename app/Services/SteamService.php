@@ -23,9 +23,9 @@ class SteamService
         SteamService::$steamConfig['apikey'] = "C782513B31A877DAAC6F646372521C65";
         // The main URL of your website displayed in the login page
         SteamService::$steamConfig['domainname'] = "core.aptitekk.com:8083";
-        // Page to redirect to after a successfull logout (from the directory the SteamAuth-folder is located in) - NO slash at the beginning!
+        // Page to redirect to after a successful logout (from the directory the SteamAuth-folder is located in) - NO slash at the beginning!
         SteamService::$steamConfig['logoutpage'] = "/";
-        // Page to redirect to after a successfull login (from the directory the SteamAuth-folder is located in) - NO slash at the beginning!
+        // Page to redirect to after a successful login (from the directory the SteamAuth-folder is located in) - NO slash at the beginning!
         SteamService::$steamConfig['loginpage'] = "/you";
 
     }
@@ -48,6 +48,7 @@ class SteamService
                     preg_match($ptn, $id, $matches);
 
                     $_SESSION['steamid'] = $matches[1];
+                    Log::notice("good login");
                     $this->update();
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
