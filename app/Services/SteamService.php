@@ -15,6 +15,8 @@ class SteamService
      */
     public function __construct()
     {
+        ob_start();
+        session_start();
 
         //Version 3.2
         // Your Steam WebAPI-Key found at http://steamcommunity.com/dev/apikey
@@ -30,8 +32,6 @@ class SteamService
 
     public function login()
     {
-        ob_start();
-        session_start();
         try {
             $openid = new LightOpenID(SteamService::$steamConfig['domainname']);
 
