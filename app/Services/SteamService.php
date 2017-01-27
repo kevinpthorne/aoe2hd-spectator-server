@@ -36,9 +36,10 @@ class SteamService
 
             if (!$openid->mode) {
                 $openid->identity = 'http://steamcommunity.com/openid';
-                header('Location: ' . $openid->authUrl());
+                return redirect($openid->authUrl());
             } elseif ($openid->mode == 'cancel') {
                 echo 'User has canceled authentication!';
+                return redirect('/gologin');
             } else {
                 if ($openid->validate()) {
                     $id = $openid->identity;
