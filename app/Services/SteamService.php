@@ -17,9 +17,9 @@ class SteamService
 
         //Version 3.2
         // Your Steam WebAPI-Key found at http://steamcommunity.com/dev/apikey
-        SteamService::$steamConfig['apikey'] = "AE686431FA2A58A31CBCA0C565EEEFA6";
+        SteamService::$steamConfig['apikey'] = "C782513B31A877DAAC6F646372521C65";
         // The main URL of your website displayed in the login page
-        SteamService::$steamConfig['domainname'] = "core.aptitekk.com";
+        SteamService::$steamConfig['domainname'] = "core.aptitekk.com:8083";
         // Page to redirect to after a successfull logout (from the directory the SteamAuth-folder is located in) - NO slash at the beginning!
         SteamService::$steamConfig['logoutpage'] = "/";
         // Page to redirect to after a successfull login (from the directory the SteamAuth-folder is located in) - NO slash at the beginning!
