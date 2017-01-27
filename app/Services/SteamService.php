@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use ErrorException;
+use Log;
 
 class SteamService
 {
@@ -38,7 +39,7 @@ class SteamService
                 $openid->identity = 'http://steamcommunity.com/openid';
                 return redirect($openid->authUrl());
             } elseif ($openid->mode == 'cancel') {
-                echo 'User has canceled authentication!';
+                Log::warning('User has canceled authentication!');
                 return redirect('/gologin');
             } else {
                 if ($openid->validate()) {
@@ -50,12 +51,12 @@ class SteamService
                     $this->update();
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
-                    echo "User is not logged in.\n";
+                    Log::warning("User is not logged in.\n");
                     return redirect('/gologin');
                 }
             }
         } catch (ErrorException $e) {
-            echo $e->getMessage();
+            Log::error($e->getMessage());
             return redirect('/gologin');
         }
     }
