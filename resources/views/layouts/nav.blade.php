@@ -20,8 +20,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
                            aria-expanded="false">{{$steamprofile['personaname']}} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="#">Profile</a></li>
-                            <li><a href="#">Account</a></li>
+                            <li><a href="/user/{{$_SESSION['steamid']}}">Profile</a></li>
+                            <li><a href="/you">Account</a></li>
                             <li role="separator" class="divider"></li>
                             <li>@php logoutbutton(); @endphp</li>
                         </ul>

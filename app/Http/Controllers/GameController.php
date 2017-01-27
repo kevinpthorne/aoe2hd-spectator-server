@@ -7,18 +7,9 @@ use Illuminate\Http\Request;
 
 class GameController extends Controller
 {
-    public function __invoke()
+    function __invoke($id)
     {
-        return view('games', ['live' =>
-            Game::whereNull('time_end')
-                ->orderBy('time_start', "desc")
-                ->take(50)
-                ->get(),
-            'finished' =>
-                Game::whereNotNull('time_end')
-                    ->orderBy('time_end', "desc")
-                    ->take(50)
-                    ->get()
-        ]);
+        return view('game.game', ['game' => Game::findOrFail($id)]);
     }
+
 }

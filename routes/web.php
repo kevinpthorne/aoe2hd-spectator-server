@@ -11,4 +11,13 @@
 |
 */
 
-Route::get('/', 'GameController');
+Route::get('/', 'GamesController');
+Route::get('/gologin', function () {
+   return view('login.loginlanding');
+});
+Route::get('/login/error', function() {
+    return 'Oops';
+});
+Route::get('/game/{id}', 'GameController');
+Route::get('/you', 'AccountController');
+Route::get('/user/{id}', 'UserController');

@@ -10,7 +10,7 @@ class UserController extends Controller
 
     public function __invoke($id)
     {
-        return view('user', ['user' => User::findOrFail($id)]);
+        return view('user.user', ['user' => User::findOrFail($id)]);
     }
 
 
@@ -19,6 +19,6 @@ class UserController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('');
+        $this->middleware('steam');
     }
 }
