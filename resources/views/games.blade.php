@@ -6,7 +6,7 @@
     <h1>Games</h1>
 
     <div class="well well-lg">
-        @if($live->isEmpty())
+        @if($live === false || $live->isEmpty())
             <h6>No live games!</h6>
         @else
             <table>
@@ -34,7 +34,7 @@
     <h3>Previous Games</h3>
 
     <div class="well well-lg">
-        @if($finished->isEmpty())
+        @if($finished === false || $finished->isEmpty())
             <h6>No games!</h6>
         @else
             <table>
