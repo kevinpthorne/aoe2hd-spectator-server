@@ -3,7 +3,6 @@
 @section('title', 'Games')
 
 @section('content')
-    <h1>Games</h1>
 
     <div class="row well well-lg">
         @if($live === false) @elseif($live->isEmpty())
@@ -11,14 +10,12 @@
         @else
             <table class="table">
                 <tr>
-                    <th>Game ID</th>
                     <th>Player</th>
                     <th>Start Time</th>
                     <th></th>
                 </tr>
                 @foreach($live as $liveGame)
                     <tr>
-                        <td>{{$liveGame->id}}</td>
                         <td>{{$liveGame->owner->name}}</td>
                         <td>{{$liveGame->time_start}}</td>
                         <td><a class="btn btn-raised btn-primary"
@@ -51,7 +48,12 @@
                         <td>{{$game->owner->name}}</td>
                         <td>{{$game->time_start}}</td>
                         <td>{{$game->time_end}}</td>
-                        <td>{{($game->time_end - $game->time_start)}}</td>
+
+                        @php
+                            $start = strtotime($game->time_start);
+                            $end = strtotime($game->time_end);
+                        @endphp
+                        <td>{{date('H:i:s', ($end - $start))}}</td>
                         <td><a class="btn btn-raised btn-primary"
                                href="aoe2hdspectator://downstream/{{$game->id}}/{{$game->owner->id}}"
                                role="button">Watch</a>

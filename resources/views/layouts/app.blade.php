@@ -21,6 +21,14 @@
 <body>
 @include('nav')
 
+<div class="well">
+    <div class="container">
+        <img src="img/greenLogo.png" width="64" height="64" style="display: inline; margin-right:1%;"/>
+        <h1 style="display: inline; vertical-align: middle">@yield('title')</h1>
+    </div>
+</div>
+
+
 <div class="container">
     @yield('content')
 </div>
