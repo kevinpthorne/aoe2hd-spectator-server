@@ -46,6 +46,7 @@ class SteamService
                     preg_match($ptn, $id, $matches);
 
                     $_SESSION['steamid'] = $matches[1];
+                    error_log($_SESSION['steamid']);
                     $this->update();
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
