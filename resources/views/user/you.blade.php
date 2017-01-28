@@ -31,15 +31,14 @@
 
             <div style="text-align: center;">
                 <h3 id="key">
-                    @key
                     {{$you->key}}
                 </h3>
             </div>
 
             <div style="text-align: right">
+                <div id="status"></div>
                 <button class="btn btn-primary"
                         id="copy-button"
-                        data-id="@key"
                         data-clipboard-target="h3#key"
                         data-clipboard-action="copy">Copy
                 </button>
@@ -62,9 +61,11 @@
             var clipboard = new Clipboard('#copy-button');
             clipboard.on('success', function(e) {
                 console.log(e);
+                document.getElementById("status").innerHTML = "Copied!";
             });
             clipboard.on('error', function(e) {
                 console.log(e);
+                document.getElementById("status").innerHTML = "Error?";
             });
         })();
     </script>
