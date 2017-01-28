@@ -12,12 +12,12 @@
 
         @if($user !== false)
             <div class="row">
-                <div class="col-md-2">
+                <div class="col-md-1">
                     <img src="{{$user->avatar}}" width="64" height="64"/>
                 </div>
                 @if(!$user->games->isEmpty())
                     <div class="col-md-3">
-                        {{ $user->games->count() }} games
+                        <h3>{{ $user->games->count() }} games</h3>
                     </div>
                 @endif
             </div>
