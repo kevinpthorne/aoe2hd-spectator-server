@@ -46,14 +46,16 @@ class SteamService
                     preg_match($ptn, $id, $matches);
 
                     if(session_status() === PHP_SESSION_NONE) {
-                        error_log("Session doesn't exist, recreating");
+                        error_log("Session doesn't exist, creating");
                         ob_start();
                         session_start();
                     }
 
                     $_SESSION['steamid'] = $matches[1];
-                    error_log($_SESSION['steamid']);
+
                     $this->update();
+                    error_log(print_r($_SESSION));
+
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
                     //error_log("User is not logged in.\n");
