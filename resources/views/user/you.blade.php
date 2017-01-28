@@ -35,13 +35,14 @@
                 </h3>
             </div>
 
-            <div style="text-align: right">
-                <div id="status"></div>
-                <button class="btn btn-primary"
-                        id="copy-button"
-                        data-clipboard-target="h3#key"
-                        data-clipboard-action="copy">Copy
-                </button>
+            <div style="text-align: right; vertical-align: middle;">
+                <div id="status">
+                    <button class="btn btn-primary"
+                            id="copy-button"
+                            data-clipboard-target="h3#key"
+                            data-clipboard-action="copy">Copy
+                    </button>
+                </div>
             </div>
 
         </div>
@@ -57,13 +58,13 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
     <script>
-        (function(){
+        (function () {
             var clipboard = new Clipboard('#copy-button');
-            clipboard.on('success', function(e) {
+            clipboard.on('success', function (e) {
                 console.log(e);
                 document.getElementById("status").innerHTML = "Copied!";
             });
-            clipboard.on('error', function(e) {
+            clipboard.on('error', function (e) {
                 console.log(e);
                 document.getElementById("status").innerHTML = "Error?";
             });
