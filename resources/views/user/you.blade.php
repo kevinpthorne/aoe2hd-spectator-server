@@ -29,29 +29,26 @@
     <div class="well well-lg">
         <div class="row">
 
-            <div id="toCopy" style="text-align: center;">
-
+            <div id="key" style="text-align: center;">
                 <h3>{{$you->key}}</h3>
-
-            </div>
-
-        </div>
-        <div class="row">
-
-            <div style="text-align: center;">
-
-                <h5>Keep this safe. The client requires a key for streaming and spectating.</h5>
-
             </div>
 
         </div>
         <div class="row">
 
             <div style="text-align: right">
-                <button class="btn btn-default" data-clipboard-target="#toCopy">Copy</button>
+                <button class="btn btn-default" data-clipboard-target="#key">Copy</button>
             </div>
 
         </div>
+        <div class="row">
+
+            <div style="text-align: center;">
+                <h5>Keep this safe. The client requires a key for streaming and spectating.</h5>
+            </div>
+
+        </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
