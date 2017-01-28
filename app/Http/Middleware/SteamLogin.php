@@ -15,7 +15,7 @@ class SteamLogin
      */
     public function handle($request, Closure $next)
     {
-        if(isset($_SESSION['steamid']))
+        if($request->session()->get('steamid', null) !== null)
             return $next($request);
         //else login page
         return redirect()->guest('/gologin');
