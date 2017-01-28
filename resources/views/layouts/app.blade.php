@@ -29,5 +29,11 @@
     @yield('content')
 </div>
 
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0alpha.5/js/bootstrap.min.js">
+</script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js">
+</script>
+
 </body>
 </html>
