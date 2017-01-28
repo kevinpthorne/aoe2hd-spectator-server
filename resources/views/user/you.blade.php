@@ -38,6 +38,7 @@
 
             <div style="text-align: right">
                 <button class="btn btn-default"
+                        id="copy-button"
                         data-clipboard-target="#key"
                         data-clipboard-action="copy">Copy
                 </button>
