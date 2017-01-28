@@ -99,7 +99,7 @@ class SteamService
             $user->id = $session->get('steamid');
             $user->name = $session->get('steam_personaname');
             $user->key = "key_" . sha1(uniqid($session->get('steamid')));
-            $user->avatar = $session->get('steam_avatar');
+            $user->avatar = $session->get('steam_avatarmedium');
 
             $user->save();
         }
