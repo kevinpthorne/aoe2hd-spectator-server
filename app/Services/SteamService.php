@@ -53,10 +53,10 @@ class SteamService
 
                     $_SESSION['steamid'] = $matches[1];
 
-                    $this->update();
                     error_log(print_r($_SESSION['steamid']));
                     error_log(var_dump($_SESSION));
 
+                    $this->update();
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
                     //error_log("User is not logged in.\n");
