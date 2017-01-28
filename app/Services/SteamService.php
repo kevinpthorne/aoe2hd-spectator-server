@@ -61,8 +61,9 @@ class SteamService
         }
     }
 
-    public function logout()
+    public function logout($session)
     {
+        $session->flush();
         return redirect(SteamService::$steamConfig['logoutpage']);
     }
 

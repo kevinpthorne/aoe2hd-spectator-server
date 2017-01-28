@@ -7,7 +7,7 @@
     <div class="well well-lg">
         <div class="row">
 
-            <div class="col-md-3">
+            <div class="col-md-1">
                 <img src="{{$you->avatar}}" class="img-rounded" width="64" height="64"/>
             </div>
             <div class="col-md-5">
@@ -17,7 +17,7 @@
         </div>
         <div class="row">
 
-            <div class="col-md-5 col-md-offset-3">
+            <div class="col-md-5 col-md-offset-1">
                 <a href="/user/{{$you->id}}">View Your Profile</a>
             </div>
 
@@ -29,7 +29,7 @@
     <div class="well well-lg">
         <div class="row">
 
-            <div style="text-align: center;">
+            <div id="toCopy" style="text-align: center;">
 
                 <h3>{{$you->key}}</h3>
 
@@ -45,6 +45,15 @@
             </div>
 
         </div>
+        <div class="row">
+
+            <div style="text-align: right">
+                <button class="btn btn-default" data-clipboard-target="#toCopy">Copy</button>
+            </div>
+
+        </div>
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
 
 @endsection
