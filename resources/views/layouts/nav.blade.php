@@ -18,9 +18,9 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li class="dropdown">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
-                           aria-expanded="false">{{$steamprofile['personaname']}} <span class="caret"></span></a>
+                           aria-expanded="false">{{session('personaname')}} <span class="caret"></span></a>
                         <ul class="dropdown-menu">
-                            <li><a href="/user/{{$_SESSION['steamid']}}">Profile</a></li>
+                            <li><a href="/user/{{session('steamid')}}">Profile</a></li>
                             <li><a href="/you">Account</a></li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/logout">Log Out</a></li>
