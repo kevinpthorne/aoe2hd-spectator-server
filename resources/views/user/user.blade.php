@@ -15,22 +15,16 @@
                 <div class="col-md-1">
                     <img src="{{$user->avatar}}" width="64" height="64"/>
                 </div>
-                @if(!$user->games->isEmpty())
-                    <div class="col-md-3">
-                        <h3>{{ $user->games->count() }} games</h3>
-                    </div>
-                @endif
+                <div class="col-md-3">
+                    <h3>{{ $user->games->count() }} games</h3>
+                </div>
             </div>
 
             <br/>
 
             <div class="row">
                 <div class="col-md-12">
-                    @if($user->games->isEmpty())
-                        <div style="text-align: center;">
-                            <h5>No games yet!</h5>
-                        </div>
-                    @else
+                    @if(!$user->games->isEmpty())
                         <table class="table">
                             <tr>
                                 <th></th>
