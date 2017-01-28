@@ -17,6 +17,7 @@ class SteamService
     {
         ob_start();
         session_start();
+        error_log("construct called");
 
         //Version 3.2
         // Your Steam WebAPI-Key found at http://steamcommunity.com/dev/apikey
