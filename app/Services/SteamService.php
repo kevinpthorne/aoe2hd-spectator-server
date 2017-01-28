@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\User;
 use ErrorException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class SteamService
 {
@@ -90,6 +92,19 @@ class SteamService
         $session->put('steam_primaryclanid', $content['response']['players'][0]['primaryclanid']);
         $session->put('steam_timecreated', $content['response']['players'][0]['timecreated']);
         $session->put('steam_uptodate', time());
+
+        try {
+            $user = User::find($session->get('steamid'));
+        } catch (ModelNotFoundException $e) {
+            $user = new User;
+
+            $user->id = $session->get('steamid');
+            $user->name = $session->get('steam_personaname');
+            $user->key = "key_" . sha1(uniqid($session->get('steamid')));
+            $user->avatar = $session->get('steam_avatar');
+
+            $user->save();
+        }
 
     }
 
