@@ -10,7 +10,11 @@ class AccountController extends Controller
 
     function __invoke()
     {
-        return view('user.you', ['you' => User::findOrFail($_SESSION['steamid'])]);
+        return view('user.you',
+            ['you' =>
+                User::findOrFail(session('steamid'))
+            ]
+        );
     }
 
     public function __construct()
