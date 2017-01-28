@@ -18,13 +18,11 @@ class SteamLoginController extends Controller
         $this->steamService = $steamService;
     }
 
-    public function login() {
-        return $this->steamService->login();
+    public function login(Request $request) {
+        return $this->steamService->login($request->session());
     }
 
     public function logout() {
-        session_unset();
-        session_destroy();
         return $this->steamService->logout();
     }
 }

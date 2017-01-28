@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use ErrorException;
-use Log;
 
 class SteamService
 {
@@ -15,7 +14,6 @@ class SteamService
      */
     public function __construct()
     {
-
         //Version 3.2
         // Your Steam WebAPI-Key found at http://steamcommunity.com/dev/apikey
         SteamService::$steamConfig['apikey'] = "C782513B31A877DAAC6F646372521C65";
@@ -28,7 +26,7 @@ class SteamService
 
     }
 
-    public function login()
+    public function login($session)
     {
         try {
             $openid = new LightOpenID(SteamService::$steamConfig['domainname']);
@@ -45,18 +43,10 @@ class SteamService
                     $ptn = "/^http:\/\/steamcommunity\.com\/openid\/id\/(7[0-9]{15,25}+)$/";
                     preg_match($ptn, $id, $matches);
 
-                    if(session_status() === PHP_SESSION_NONE) {
-                        error_log("Session doesn't exist, creating");
-                        ob_start();
-                        session_start();
-                    }
+                    //$_SESSION['steamid'] = $matches[1];
+                    $session->put('steamid', $matches[1]);
 
-                    $_SESSION['steamid'] = $matches[1];
-
-                    error_log(print_r($_SESSION['steamid']));
-                    error_log(var_dump($_SESSION));
-
-                    $this->update();
+                    $this->update($session);
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
                     //error_log("User is not logged in.\n");
@@ -74,30 +64,33 @@ class SteamService
         return redirect(SteamService::$steamConfig['logoutpage']);
     }
 
-    public function update($steamId = "")
+    public function update($session, $steamId = "")
     {
         $url = file_get_contents("http://api.steampowered.com/ISteamUser/GetPlayerSummaries/v0002/?key="
             . SteamService::$steamConfig['apikey']
-            . "&steamids=" . (empty($steamId) ? $_SESSION['steamid'] : $steamId));
+            . "&steamids=" . (empty($steamId) ? $session->get('steamid') : $steamId));
         $content = json_decode($url, true);
-        $_SESSION['steam_steamid'] = $content['response']['players'][0]['steamid'];
-        $_SESSION['steam_communityvisibilitystate'] = $content['response']['players'][0]['communityvisibilitystate'];
-        $_SESSION['steam_profilestate'] = $content['response']['players'][0]['profilestate'];
-        $_SESSION['steam_personaname'] = $content['response']['players'][0]['personaname'];
-        $_SESSION['steam_lastlogoff'] = $content['response']['players'][0]['lastlogoff'];
-        $_SESSION['steam_profileurl'] = $content['response']['players'][0]['profileurl'];
-        $_SESSION['steam_avatar'] = $content['response']['players'][0]['avatar'];
-        $_SESSION['steam_avatarmedium'] = $content['response']['players'][0]['avatarmedium'];
-        $_SESSION['steam_avatarfull'] = $content['response']['players'][0]['avatarfull'];
-        $_SESSION['steam_personastate'] = $content['response']['players'][0]['personastate'];
+        $session->put('steam_steamid', $content['response']['players'][0]['steamid']);
+        $session->put('steam_communityvisibilitystate', $content['response']['players'][0]['communityvisibilitystate']);
+        $session->put('steam_profilestate', $content['response']['players'][0]['profilestate']);
+        $session->put('steam_personaname', $content['response']['players'][0]['personaname']);
+        $session->put('steam_lastlogoff', $content['response']['players'][0]['lastlogoff']);
+        $session->put('steam_profileurl', $content['response']['players'][0]['profileurl']);
+        $session->put('steam_avatar', $content['response']['players'][0]['avatar']);
+        $session->put('steam_avatarmedium', $content['response']['players'][0]['avatarmedium']);
+        $session->put('steam_avatarfull', $content['response']['players'][0]['avatarfull']);
+        $session->put('steam_personastate', $content['response']['players'][0]['personastate']);
         if (isset($content['response']['players'][0]['realname'])) {
-            $_SESSION['steam_realname'] = $content['response']['players'][0]['realname'];
+            $session->put('steam_realname', $content['response']['players'][0]['realname']);
+
         } else {
-            $_SESSION['steam_realname'] = "Real name not given";
+            $session->put('steam_realname', "Real name not given");
+
         }
-        $_SESSION['steam_primaryclanid'] = $content['response']['players'][0]['primaryclanid'];
-        $_SESSION['steam_timecreated'] = $content['response']['players'][0]['timecreated'];
-        $_SESSION['steam_uptodate'] = time();
+        $session->put('steam_primaryclanid', $content['response']['players'][0]['primaryclanid']);
+        $session->put('steam_timecreated', $content['response']['players'][0]['timecreated']);
+        $session->put('steam_uptodate', time());
+
     }
 
 }
