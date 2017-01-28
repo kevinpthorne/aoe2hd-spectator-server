@@ -54,7 +54,7 @@ class SteamService
                     $_SESSION['steamid'] = $matches[1];
 
                     $this->update();
-                    error_log(vardump($_SESSION));
+                    error_log(var_dump($_SESSION));
 
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
