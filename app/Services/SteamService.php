@@ -84,17 +84,15 @@ class SteamService
         $session->put('steam_personastate', $content['response']['players'][0]['personastate']);
         if (isset($content['response']['players'][0]['realname'])) {
             $session->put('steam_realname', $content['response']['players'][0]['realname']);
-
         } else {
             $session->put('steam_realname', "Real name not given");
-
         }
         $session->put('steam_primaryclanid', $content['response']['players'][0]['primaryclanid']);
         $session->put('steam_timecreated', $content['response']['players'][0]['timecreated']);
         $session->put('steam_uptodate', time());
 
         try {
-            $user = User::find($session->get('steamid'));
+            $user = User::findOrFail($session->get('steamid'));
         } catch (ModelNotFoundException $e) {
             $user = new User;
 
