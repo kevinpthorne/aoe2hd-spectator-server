@@ -45,6 +45,12 @@ class SteamService
                     $ptn = "/^http:\/\/steamcommunity\.com\/openid\/id\/(7[0-9]{15,25}+)$/";
                     preg_match($ptn, $id, $matches);
 
+                    if(session_status() === PHP_SESSION_NONE) {
+                        error_log("Session doesn't exist, recreating");
+                        ob_start();
+                        session_start();
+                    }
+
                     $_SESSION['steamid'] = $matches[1];
                     error_log($_SESSION['steamid']);
                     $this->update();

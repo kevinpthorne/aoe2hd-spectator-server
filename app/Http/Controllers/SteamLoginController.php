@@ -19,11 +19,6 @@ class SteamLoginController extends Controller
     }
 
     public function login() {
-        if(session_status() === PHP_SESSION_NONE) {
-            error_log("Session doesn't exist, recreating");
-            ob_start();
-            session_start();
-        }
         return $this->steamService->login();
     }
 
