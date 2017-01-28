@@ -29,8 +29,8 @@
     <div class="well well-lg">
         <div class="row">
 
-            <div id="key" style="text-align: center;">
-                <h3>{{$you->key}}</h3>
+            <div style="text-align: center;">
+                <h3 id="key">{{$you->key}}</h3>
             </div>
 
         </div>
@@ -52,5 +52,10 @@
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
+    <script>
+        (function(){
+            new Clipboard('#key');
+        })();
+    </script>
 
 @endsection
