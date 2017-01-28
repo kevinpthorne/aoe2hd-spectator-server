@@ -37,7 +37,10 @@
         <div class="row">
 
             <div style="text-align: right">
-                <button class="btn btn-default" data-clipboard-target="#key">Copy</button>
+                <button class="btn btn-default"
+                        data-clipboard-target="#key"
+                        data-clipboard-action="copy">Copy
+                </button>
             </div>
 
         </div>
