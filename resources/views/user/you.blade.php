@@ -62,11 +62,10 @@
             var clipboard = new Clipboard('#copy-button');
             clipboard.on('success', function (e) {
                 console.log(e);
-                document.getElementById("status").innerHTML = "Copied!";
+                document.getElementById("status").innerHTML = "<h4>Copied!</h4>";
             });
             clipboard.on('error', function (e) {
                 console.log(e);
-                document.getElementById("status").innerHTML = "Error?";
             });
         })();
     </script>
