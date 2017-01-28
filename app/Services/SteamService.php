@@ -37,10 +37,9 @@ class SteamService
 
             if (!$openid->mode) {
                 $openid->identity = 'http://steamcommunity.com/openid';
-                error_log("login");
                 return redirect($openid->authUrl());
             } elseif ($openid->mode == 'cancel') {
-                error_log('User has canceled authentication!');
+                //error_log('User has canceled authentication!');
                 return redirect('/gologin');
             } else {
                 if ($openid->validate()) {
@@ -49,11 +48,10 @@ class SteamService
                     preg_match($ptn, $id, $matches);
 
                     $_SESSION['steamid'] = $matches[1];
-                    error_log("good login");
                     $this->update();
                     return redirect(SteamService::$steamConfig['loginpage']);
                 } else {
-                    error_log("User is not logged in.\n");
+                    //error_log("User is not logged in.\n");
                     return redirect('/gologin');
                 }
             }
