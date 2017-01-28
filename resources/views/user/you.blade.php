@@ -30,12 +30,16 @@
         <div class="row">
 
             <div style="text-align: center;">
-                <h3 id="key">{{$you->key}}</h3>
+                <h3 id="key">
+                    @key
+                    {{$you->key}}
+                </h3>
             </div>
 
             <div style="text-align: right">
-                <button class="btn btn-default"
+                <button class="btn btn-primary"
                         id="copy-button"
+                        data-id="@key"
                         data-clipboard-target="h3#key"
                         data-clipboard-action="copy">Copy
                 </button>
@@ -55,7 +59,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.16/clipboard.min.js"></script>
     <script>
         (function(){
-            var clipboard = new Clipboard('#key');
+            var clipboard = new Clipboard('#copy-button');
             clipboard.on('success', function(e) {
                 console.log(e);
             });
