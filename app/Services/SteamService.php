@@ -15,9 +15,6 @@ class SteamService
      */
     public function __construct()
     {
-        ob_start();
-        session_start();
-        error_log("construct called");
 
         //Version 3.2
         // Your Steam WebAPI-Key found at http://steamcommunity.com/dev/apikey
@@ -64,8 +61,6 @@ class SteamService
 
     public function logout()
     {
-        session_unset();
-        session_destroy();
         return redirect(SteamService::$steamConfig['logoutpage']);
     }
 
