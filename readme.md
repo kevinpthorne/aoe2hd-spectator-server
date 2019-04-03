@@ -4,7 +4,7 @@ Age of Empires 2 HD - Spectator Server
 
 This is the server backend/website for the *unofficial* companion app that streams AoE2 HD games live.
 
-Note -- there is no release yet. **This is because AoE2HD seems to cache however much you have of the recording when you start the game.** As of right now, this solution cannot work until it's changed.
+Note -- there is no release yet. Current issue: tracking what's being read by the AoK HD.exe process.
 
 ## Overview
 
